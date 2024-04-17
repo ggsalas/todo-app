@@ -17,7 +17,7 @@ export default function Login() {
           action={async (formData: FormData) => {
             'use server';
             await signIn('credentials', {
-              redirectTo: '/protected',
+              redirectTo: '/app',
               email: formData.get('email') as string,
               password: formData.get('password') as string,
             });
@@ -29,7 +29,6 @@ export default function Login() {
             <Link href="/register" className="font-semibold text-gray-800">
               Sign up
             </Link>
-            {' for free.'}
           </p>
         </Form>
       </div>

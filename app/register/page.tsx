@@ -1,21 +1,22 @@
-import Link from 'next/link';
-import { Form } from 'app/form';
-import { redirect } from 'next/navigation';
-import { createUser, getUser } from 'app/db';
-import { SubmitButton } from 'app/submit-button';
+import Link from "next/link";
+import { Form } from "app/form";
+import { redirect } from "next/navigation";
+import { createUser, getUser } from "@/app/db";
+import { SubmitButton } from "app/submit-button";
 
-export default function Login() {
+export default function Register() {
   async function register(formData: FormData) {
-    'use server';
-    let email = formData.get('email') as string;
-    let password = formData.get('password') as string;
+    "use server";
+    let email = formData.get("email") as string;
+    let password = formData.get("password") as string;
+    let timezoneOffset = Number(formData.get("timezoneOffset"));
     let user = await getUser(email);
 
     if (user.length > 0) {
-      return 'User already exists'; // TODO: Handle errors with useFormStatus
+      return "User already exists"; // TODO: Handle errors with useFormStatus
     } else {
-      await createUser(email, password);
-      redirect('/login');
+      await createUser(email, password, timezoneOffset);
+      redirect("/login");
     }
   }
 
@@ -29,13 +30,49 @@ export default function Login() {
           </p>
         </div>
         <Form action={register}>
+          <div>
+            <label
+              htmlFor="timezoneOffset"
+              className="block text-xs text-gray-600 uppercase"
+            >
+              Timezone offset
+            </label>
+            <select name="timezoneOffset" id="timezoneOffset">
+              <option value="-12">UTC-12:00</option>
+              <option value="-11">UTC-11:00</option>
+              <option value="-10">UTC-10:00</option>
+              <option value="-9">UTC-09:00</option>
+              <option value="-8">UTC-08:00</option>
+              <option value="-7">UTC-07:00</option>
+              <option value="-6">UTC-06:00</option>
+              <option value="-5">UTC-05:00</option>
+              <option value="-4">UTC-04:00</option>
+              <option value="-3">UTC-03:00</option>
+              <option value="-2">UTC-02:00</option>
+              <option value="-1">UTC-01:00</option>
+              <option value="0">UTC±00:00</option>
+              <option value="1">UTC+01:00</option>
+              <option value="2">UTC+02:00</option>
+              <option value="3">UTC+03:00</option>
+              <option value="4">UTC+04:00</option>
+              <option value="5">UTC+05:00</option>
+              <option value="6">UTC+06:00</option>
+              <option value="7">UTC+07:00</option>
+              <option value="8">UTC+08:00</option>
+              <option value="9">UTC+09:00</option>
+              <option value="10">UTC+10:00</option>
+              <option value="11">UTC+11:00</option>
+              <option value="12">UTC+12:00</option>
+            </select>
+          </div>
+
           <SubmitButton>Sign Up</SubmitButton>
           <p className="text-center text-sm text-gray-600">
-            {'Already have an account? '}
+            {"Already have an account? "}
             <Link href="/login" className="font-semibold text-gray-800">
               Sign in
             </Link>
-            {' instead.'}
+            {" instead."}
           </p>
         </Form>
       </div>
