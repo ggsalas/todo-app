@@ -12,7 +12,7 @@ export default function Register() {
     let timezoneOffset = Number(formData.get("timezoneOffset"));
     let user = await getUser(email);
 
-    if (user.length > 0) {
+    if (user) {
       return "User already exists"; // TODO: Handle errors with useFormStatus
     } else {
       await createUser(email, password, timezoneOffset);

@@ -1,11 +1,11 @@
 {
-  "id": "384a8f5e-d169-4a1e-acca-a33cc65d8f8d",
+  "id": "b754bbc7-a508-45fb-aad2-091a1f9c9f49",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
   "tables": {
-    "User": {
-      "name": "User",
+    "Task": {
+      "name": "Task",
       "schema": "",
       "columns": {
         "id": {
@@ -14,10 +14,84 @@
           "primaryKey": true,
           "notNull": true
         },
+        "authorEmail": {
+          "name": "authorEmail",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "notes": {
+          "name": "notes",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "dueDate": {
+          "name": "dueDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Task_authorEmail_User_email_fk": {
+          "name": "Task_authorEmail_User_email_fk",
+          "tableFrom": "Task",
+          "tableTo": "User",
+          "columnsFrom": [
+            "authorEmail"
+          ],
+          "columnsTo": [
+            "email"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "User": {
+      "name": "User",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
         "email": {
           "name": "email",
           "type": "varchar(64)",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "password": {
@@ -26,8 +100,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "timezone": {
-          "name": "timezone",
+        "timezoneOffset": {
+          "name": "timezoneOffset",
           "type": "smallint",
           "primaryKey": false,
           "notNull": false
@@ -36,7 +110,15 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "User_email_unique": {
+          "name": "User_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
     }
   },
   "enums": {},

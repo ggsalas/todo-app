@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Task } from "@/components/Task";
-import { tasks } from "@/lib/mockData";
 import { UserAvatar } from "@/components/UserAvatar";
+import { getTasks } from "../db";
 
 export default async function AppPage() {
+
+  const tasks = await getTasks()
+
+  console.log(tasks)
   return (
     <div className="flex flex-col w-full h-full relative">
-      {/* Fating button */}
+      {/* Floating button */}
       <Button
         className="ml-auto fixed bottom-12 right-8 w-16 h-16 rounded-[4rem] shadow-xl"
         size="sm"

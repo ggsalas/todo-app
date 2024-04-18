@@ -21,12 +21,12 @@ export async function Task({ task }: TaskProps) {
         >
           <div className="flex flex-col justify-between gap-3">
             {task.description && (
-              <h2 className="text-sm font-medium leading-none">
+              <h2 className="text-sm leading-5 font-medium">
                 {task.description}
               </h2>
             )}
             {task.notes && (
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm leading-5 text-gray-500 dark:text-gray-400">
                 {task.notes}
               </p>
             )}
@@ -34,9 +34,9 @@ export async function Task({ task }: TaskProps) {
 
           <div className="flex flex-col justify-between gap-3">
             {task.dueDate && (
-              <div className="text-xs leading-none whitespace-nowrap">
-                Due
-                <time dateTime="2023-11-21">{task.dueDate}</time>
+              <div className="text-xs leading-5 whitespace-nowrap">
+                {'Due '}
+                <time dateTime="2023-11-21">{new Date(task.dueDate).toUTCString()}</time>
               </div>
             )}
 
