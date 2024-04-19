@@ -3,10 +3,11 @@ CREATE TABLE IF NOT EXISTS "Task" (
 	"authorEmail" varchar(64) NOT NULL,
 	"description" varchar NOT NULL,
 	"notes" varchar,
-	"createdAt" date DEFAULT now() NOT NULL,
-	"updatedAt" date DEFAULT now() NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	"updatedAt" timestamp DEFAULT now() NOT NULL,
 	"dueDate" date NOT NULL,
-	"status" text NOT NULL
+	"status" text DEFAULT 'todo' NOT NULL,
+	"alertFrom" text DEFAULT 'day' NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "User" (

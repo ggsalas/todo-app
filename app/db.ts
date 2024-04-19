@@ -33,7 +33,7 @@ export async function createUser(
 }
 
 // Handle data
-export async function getTasks() {
+export async function getUserTasks() {
   let session = await auth();
   const userEmail = session?.user?.email;
   if (!userEmail) throw new Error("missing user email for get tasks");
@@ -45,18 +45,67 @@ export async function getTasks() {
   return tasks;
 }
 
-export async function createTask({ description, dueDate, alertFrom }: Partial<Task>) {
+export async function getUserTask(taskId: number) {
+  let session = await auth();
+  const userEmail = session?.user?.email;
+  if (!userEmail) throw new Error("missing user email for get tasks");
+
+  const task: TaskType[] = await db.execute(
+    sql`select * from "Task" where "authorEmail" = ${userEmail} AND id = ${taskId}`
+  );
+
+  return task[0];
+}
+
+export async function createUserTask({
+  description,
+  dueDate,
+  alertFrom,
+  notes,
+}: Partial<Task>) {
   let session = await auth();
   const userEmail = session?.user?.email;
   if (!userEmail) throw new Error("missing user email for create task");
-  if (!description || !dueDate || !alertFrom) throw new Error("missing required form fields");
+  if (!description || !dueDate || !alertFrom)
+    throw new Error("missing required form fields");
 
   const newTask: TaskType[] = await db.execute(
     sql`
-      insert into "Task"("authorEmail", description, "dueDate", "alertFrom")
-        values(${userEmail}, ${description}, ${dueDate}, ${alertFrom}); 
+      insert into "Task"("authorEmail", description, "dueDate", "alertFrom", notes)
+        values(${userEmail}, ${description}, ${dueDate}, ${alertFrom}, ${
+      notes ?? ""
+    }); 
     `
   );
+
+  return newTask;
+}
+
+export async function editUserTask({
+  id,
+  notes = "",
+  description,
+  dueDate,
+  alertFrom,
+}: Partial<Task>) {
+  let session = await auth();
+  const userEmail = session?.user?.email;
+  if (!userEmail) throw new Error("missing user email for create task");
+  if (!description || !dueDate || !alertFrom || !id)
+    throw new Error("missing required form fields");
+
+  const sqlString = sql`
+      update "Task"
+        set 
+          description = ${description},
+          notes = ${notes},
+          "dueDate" = ${dueDate},
+          "alertFrom" = ${alertFrom},
+          "updatedAt" = ${new Date()}
+      where "authorEmail" = ${userEmail} and id = ${id}
+    `;
+  console.log(sqlString);
+  const newTask: TaskType[] = await db.execute(sqlString);
 
   return newTask;
 }

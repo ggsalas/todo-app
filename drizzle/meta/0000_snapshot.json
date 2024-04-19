@@ -1,5 +1,5 @@
 {
-  "id": "b754bbc7-a508-45fb-aad2-091a1f9c9f49",
+  "id": "bde49d73-4b56-4ebb-9c47-b99531ab1e8e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -34,14 +34,14 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
         },
         "updatedAt": {
           "name": "updatedAt",
-          "type": "date",
+          "type": "timestamp",
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
@@ -56,7 +56,15 @@
           "name": "status",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'todo'"
+        },
+        "alertFrom": {
+          "name": "alertFrom",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'day'"
         }
       },
       "indexes": {},

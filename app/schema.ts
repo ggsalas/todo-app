@@ -3,9 +3,9 @@ import {
   pgTable,
   serial,
   varchar,
-  integer,
   text,
   date,
+  timestamp,
 } from "drizzle-orm/pg-core";
 
 export const User = pgTable("User", {
@@ -22,8 +22,8 @@ export const Task = pgTable("Task", {
     .notNull(),
   description: varchar("description").notNull(),
   notes: varchar("notes"),
-  createdAt: date("createdAt", { mode: "string" }).notNull().defaultNow(),
-  updatedAt: date("updatedAt", { mode: "string" }).notNull().defaultNow(),
+  createdAt: timestamp("createdAt", { mode: "string" }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "string" }).notNull().defaultNow(),
   dueDate: date("dueDate", { mode: "string" }).notNull(),
   status: text("status", { enum: ["todo", "inProgress", "done"] }).notNull().default('todo'),
   alertFrom: text("alertFrom", { enum: ["day", "week"] }).notNull().default('day')

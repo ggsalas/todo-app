@@ -1,14 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { buttonVariants } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import { Task } from "@/components/Task";
 import { UserAvatar } from "@/components/UserAvatar";
-import { getTasks } from "../db";
+import { getUserTasks } from "../db";
 import Link from "next/link";
 
 export default async function AppPage() {
-  const tasks = await getTasks();
+  const tasks = await getUserTasks();
 
   return (
     <div className="flex flex-col w-full h-full relative">
