@@ -25,5 +25,6 @@ export const Task = pgTable("Task", {
   createdAt: date("createdAt", { mode: "string" }).notNull().defaultNow(),
   updatedAt: date("updatedAt", { mode: "string" }).notNull().defaultNow(),
   dueDate: date("dueDate", { mode: "string" }).notNull(),
-  status: text("status", { enum: ["todo", "inProgress", "done"] }).notNull(),
+  status: text("status", { enum: ["todo", "inProgress", "done"] }).notNull().default('todo'),
+  alertFrom: text("alertFrom", { enum: ["day", "week"] }).notNull().default('day')
 });

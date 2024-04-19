@@ -1,0 +1,18 @@
+.rdp-caption_start {
+  width: 100%;
+}
+
+.input-calendar .rdp-head th,
+.input-calendar .rdp-tbody td {
+  width: calc(100% / 7);
+  background: transparent !important;
+}
+
+.input-calendar button[name="previous-month"],
+.input-calendar button[name="next-month"] {
+  width: calc(100% / 7);
+}
+
+.input-calendar .day-outside {
+  pointer-events: none;
+}

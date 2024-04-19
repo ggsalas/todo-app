@@ -1,23 +1,26 @@
 import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
 import { Task } from "@/components/Task";
 import { UserAvatar } from "@/components/UserAvatar";
 import { getTasks } from "../db";
+import Link from "next/link";
 
 export default async function AppPage() {
+  const tasks = await getTasks();
 
-  const tasks = await getTasks()
-
-  console.log(tasks)
   return (
     <div className="flex flex-col w-full h-full relative">
       {/* Floating button */}
-      <Button
-        className="ml-auto fixed bottom-12 right-8 w-16 h-16 rounded-[4rem] shadow-xl"
-        size="sm"
+      <Link
+        className={`${buttonVariants({
+          size: "sm",
+        })} fixed bottom-8 right-8 w-16 !h-16 !rounded-[8rem] shadow-xl z-20`}
+        href="/app/add-task"
       >
         <PlusIcon className="w-6 h-6" />
-      </Button>
+      </Link>
 
       {/* Header */}
       <header className="h-16 flex items-center px-3 border-b">
@@ -37,7 +40,7 @@ export default async function AppPage() {
 
       {/* Content */}
       <div className="flex-1 overflow-auto">
-        <div className="grid gap-2 p-3">
+        <div className="grid gap-2 p-3 mb-28">
           {tasks.map((task) => (
             <Task key={task.id} task={task} />
           ))}

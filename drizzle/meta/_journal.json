@@ -8,6 +8,20 @@
       "when": 1713447659486,
       "tag": "0000_nostalgic_slipstream",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1713455494465,
+      "tag": "0001_elite_smasher",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1713455687862,
+      "tag": "0002_redundant_hedge_knight",
+      "breakpoints": true
     }
   ]
 }

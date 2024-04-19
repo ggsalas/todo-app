@@ -4,7 +4,7 @@ import postgres from "postgres";
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import * as schema from "./schema";
 import { auth } from "app/auth";
-import { Task as TaskType } from "@/lib/definitions";
+import { Task, Task as TaskType } from "@/lib/definitions";
 
 export let client = postgres(`${process.env.POSTGRES_URL}`);
 export let db = drizzle(client, { schema });
@@ -35,7 +35,7 @@ export async function createUser(
 // Handle data
 export async function getTasks() {
   let session = await auth();
-  const userEmail = session?.user?.email
+  const userEmail = session?.user?.email;
   if (!userEmail) throw new Error("missing user email for get tasks");
 
   const tasks: TaskType[] = await db.execute(
@@ -43,4 +43,20 @@ export async function getTasks() {
   );
 
   return tasks;
+}
+
+export async function createTask({ description, dueDate, alertFrom }: Partial<Task>) {
+  let session = await auth();
+  const userEmail = session?.user?.email;
+  if (!userEmail) throw new Error("missing user email for create task");
+  if (!description || !dueDate || !alertFrom) throw new Error("missing required form fields");
+
+  const newTask: TaskType[] = await db.execute(
+    sql`
+      insert into "Task"("authorEmail", description, "dueDate", "alertFrom")
+        values(${userEmail}, ${description}, ${dueDate}, ${alertFrom}); 
+    `
+  );
+
+  return newTask;
 }
