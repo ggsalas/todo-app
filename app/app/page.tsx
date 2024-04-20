@@ -1,6 +1,6 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Task } from "@/components/Task";
+import { Task } from "@/components/TaskItem/Task";
 import { UserAvatar } from "@/components/UserAvatar";
 import { getUserTasks } from "../db";
 import Link from "next/link";
@@ -14,7 +14,7 @@ export default async function AppPage() {
       <Link
         className={`${buttonVariants({
           size: "sm",
-        })} fixed bottom-8 right-8 w-16 !h-16 !rounded-[8rem] shadow-xl z-20`}
+        })} fixed bottom-8 right-4 w-16 !h-16 !rounded-[8rem] shadow-xl z-20`}
         href="/app/add-task"
       >
         <PlusIcon className="w-6 h-6" />
@@ -37,7 +37,7 @@ export default async function AppPage() {
       </header>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto select-none">
         <div className="grid gap-2 p-3 mb-28">
           {tasks.map((task) => (
             <Task key={task.id} task={task} />

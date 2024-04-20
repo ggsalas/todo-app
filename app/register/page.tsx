@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Form } from "app/form";
+import { LoginForm } from "@/components/LoginForm";
 import { redirect } from "next/navigation";
 import { createUser, getUser } from "@/app/db";
-import { SubmitButton } from "app/submit-button";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default function Register() {
   async function register(formData: FormData) {
@@ -29,7 +29,7 @@ export default function Register() {
             Create an account with your email and password
           </p>
         </div>
-        <Form action={register}>
+        <LoginForm action={register}>
           <div>
             <label
               htmlFor="timezoneOffset"
@@ -78,7 +78,7 @@ export default function Register() {
             </Link>
             {" instead."}
           </p>
-        </Form>
+        </LoginForm>
       </div>
     </div>
   );

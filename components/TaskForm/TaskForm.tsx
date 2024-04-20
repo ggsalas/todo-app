@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { InputCalendar } from "@/components/ui/InputCalendar/InputCalendar";
 import { subDays } from "date-fns/subDays";
+import { AlertFromButtons } from "./AlertFromButtons";
 
 type TaskFormProps = {
   task?: TaskType;
@@ -16,8 +17,6 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
   const disabledDays = [
     { from: new Date("2000-01-01"), to: subDays(new Date(), 1) },
   ];
-
-  console.log('task to edit ', task)
 
   return (
     <div className="flex flex-col w-full min-h-svh relative">
@@ -31,10 +30,7 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
       <div className="flex flex-col grow p-4">
         <div className="flex flex-col grow">
           <form action={onSubmit} className="flex flex-col gap-4 grow">
-            <select name="alertFrom" defaultValue={task?.alertFrom || "day"}>
-              <option value="day">Day</option>
-              <option value="week">Week</option>
-            </select>
+            <AlertFromButtons defaultValue={task?.alertFrom ?? undefined} />
 
             <InputCalendar
               name="dueDate"

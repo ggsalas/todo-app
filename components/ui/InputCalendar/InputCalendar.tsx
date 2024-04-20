@@ -3,7 +3,6 @@
 import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import { useState } from "react";
 import "./styles.css";
-import { formatISO, getDate } from "date-fns";
 import { getISODate } from "@/lib/utils";
 
 type InputCalendarProps = Exclude<

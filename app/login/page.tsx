@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Form } from "app/form";
+import { LoginForm } from "@/components/LoginForm";
 import { signIn } from "app/auth";
-import { SubmitButton } from "app/submit-button";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default function Login() {
   return (
@@ -13,7 +13,7 @@ export default function Login() {
             Use your email and password to sign in
           </p>
         </div>
-        <Form
+        <LoginForm
           action={async (formData: FormData) => {
             "use server";
             await signIn("credentials", {
@@ -30,7 +30,7 @@ export default function Login() {
               Sign up
             </Link>
           </p>
-        </Form>
+        </LoginForm>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { createUserTask } from "@/app/db";
 import { redirect } from "next/navigation";
-import { TaskForm } from "@/components/TaskForm";
+import { TaskForm } from "@/components/TaskForm/TaskForm";
 
 export default async function AddTask() {
   async function createTicket(formData: FormData) {

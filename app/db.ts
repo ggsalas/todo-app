@@ -39,7 +39,7 @@ export async function getUserTasks() {
   if (!userEmail) throw new Error("missing user email for get tasks");
 
   const tasks: TaskType[] = await db.execute(
-    sql`select * from "Task" where "authorEmail" = ${userEmail}`
+    sql`select * from "Task" where "authorEmail" = ${userEmail} order by "dueDate"`
   );
 
   return tasks;
@@ -65,7 +65,7 @@ export async function createUserTask({
 }: Partial<Task>) {
   let session = await auth();
   const userEmail = session?.user?.email;
-  if (!userEmail) throw new Error("missing user email for create task");
+  if (!userEmail) throw new Error("missing user email from session");
   if (!description || !dueDate || !alertFrom)
     throw new Error("missing required form fields");
 
@@ -90,7 +90,7 @@ export async function editUserTask({
 }: Partial<Task>) {
   let session = await auth();
   const userEmail = session?.user?.email;
-  if (!userEmail) throw new Error("missing user email for create task");
+  if (!userEmail) throw new Error("missing user email from session");
   if (!description || !dueDate || !alertFrom || !id)
     throw new Error("missing required form fields");
 
@@ -104,7 +104,27 @@ export async function editUserTask({
           "updatedAt" = ${new Date()}
       where "authorEmail" = ${userEmail} and id = ${id}
     `;
-  console.log(sqlString);
+  const newTask: TaskType[] = await db.execute(sqlString);
+
+  return newTask;
+}
+
+export async function editUserTaskStatus({
+  id,
+  status
+}: Partial<Task>) {
+  let session = await auth();
+  const userEmail = session?.user?.email;
+  if (!userEmail) throw new Error("missing user email from session");
+  if (!status || !id) throw new Error("missing required form fields");
+
+  const sqlString = sql`
+      update "Task"
+        set 
+          status = ${status},
+          "updatedAt" = ${new Date()}
+      where "authorEmail" = ${userEmail} and id = ${id}
+    `;
   const newTask: TaskType[] = await db.execute(sqlString);
 
   return newTask;
