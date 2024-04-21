@@ -5,6 +5,7 @@ import { genSaltSync, hashSync } from "bcrypt-ts";
 import * as schema from "./schema";
 import { auth } from "app/auth";
 import { Task, Task as TaskType } from "@/lib/definitions";
+import { cache } from "react";
 
 export let client = postgres(`${process.env.POSTGRES_URL}`);
 export let db = drizzle(client, { schema });
@@ -33,7 +34,7 @@ export async function createUser(
 }
 
 // Handle data
-export async function getUserTasks() {
+async function _getUserTasks() {
   let session = await auth();
   const userEmail = session?.user?.email;
   if (!userEmail) throw new Error("missing user email for get tasks");
@@ -44,8 +45,9 @@ export async function getUserTasks() {
 
   return tasks;
 }
+export const getUserTasks = cache(_getUserTasks);
 
-export async function getUserTask(taskId: number) {
+async function _getUserTask(taskId: number) {
   let session = await auth();
   const userEmail = session?.user?.email;
   if (!userEmail) throw new Error("missing user email for get tasks");
@@ -56,6 +58,7 @@ export async function getUserTask(taskId: number) {
 
   return task[0];
 }
+export const getUserTask = cache(_getUserTask);
 
 export async function createUserTask({
   description,

@@ -2,7 +2,7 @@ import './globals.css';
 
 import { GeistSans } from 'geist/font/sans';
 
-let title = 'Todo App';
+let title = 'Dooet';
 let description = 'Don\'t forget anything';
 
 export const metadata = {
@@ -13,7 +13,6 @@ export const metadata = {
     title,
     description,
   },
-  metadataBase: new URL('https://nextjs-postgres-auth.vercel.app'),
 };
 
 export default function RootLayout({

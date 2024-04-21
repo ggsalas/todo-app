@@ -4,12 +4,11 @@ export default function Page() {
   return (
     <div className="h-screen w-full flex flex-col justify-center p-6 bg-gray-50">
       <div className="container flex flex-col items-center justify-center gap-5 px-4 text-center">
-
         <div className="z-10 w-full max-w-md overflow-hidden rounded-2xl border border-gray-100 shadow-xl">
           <div className="flex flex-col items-center justify-center space-y-3 gap-5 border-b border-gray-200 bg-white px-4 py-6 pt-8 text-center sm:px-16">
             <div className="space-y-2">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                <span>TODO: App!</span>
+                Dooet!
               </h1>
             </div>
             <p className="text-gray-500 md:text-xl/relaxed xl:text-base/relaxed dark:text-gray-400">
@@ -25,7 +24,6 @@ export default function Page() {
             </Link>
           </div>
         </div>
-
       </div>
     </div>
   );
