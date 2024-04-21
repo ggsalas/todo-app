@@ -1,18 +1,20 @@
-import './globals.css';
+import "./globals.css";
 
-import { GeistSans } from 'geist/font/sans';
+import { GeistSans } from "geist/font/sans";
+import Favicon from "/public/favicon.ico";
 
-let title = 'Dooet';
-let description = 'Don\'t forget anything';
+let title = "Dooet";
+let description = "Don't forget anything";
 
 export const metadata = {
   title,
   description,
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title,
     description,
   },
+  icons: [{ rel: "icon", url: Favicon.src }],
 };
 
 export default function RootLayout({

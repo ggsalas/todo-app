@@ -4,9 +4,11 @@ import { Task } from "@/components/TaskItem/Task";
 import { UserAvatar } from "@/components/UserAvatar";
 import { getUserTasks } from "../db";
 import Link from "next/link";
+import { TAGS, cacheWithUser } from "@/lib/cacheWithUser";
+import { Task as TaskType } from "@/lib/definitions";
 
 export default async function AppPage() {
-  const tasks = await getUserTasks();
+  const tasks: TaskType[] = await cacheWithUser(getUserTasks, [TAGS.userTasks]);
 
   return (
     <div className="flex flex-col w-full h-full relative">

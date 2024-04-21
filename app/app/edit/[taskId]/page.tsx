@@ -1,6 +1,7 @@
 import { editUserTask, getUserTask } from "@/app/db";
 import { redirect } from "next/navigation";
 import { TaskForm } from "@/components/TaskForm/TaskForm";
+import { TAGS, cacheWithUser } from "@/lib/cacheWithUser";
 
 type AddTaskProps = {
   params: {
@@ -9,11 +10,15 @@ type AddTaskProps = {
 };
 
 export default async function EditTask({ params }: AddTaskProps) {
-  const task = await getUserTask(Number(params.taskId));
+  const task = await cacheWithUser(
+    (user: any) => getUserTask(Number(params.taskId), user),
+    [TAGS.userTasks]
+  );
 
   async function onEditUserTask(formData: FormData) {
     "use server";
-    const { description, dueDate, alertFrom, notes } = Object.fromEntries(formData);
+    const { description, dueDate, alertFrom, notes } =
+      Object.fromEntries(formData);
 
     await editUserTask({
       id: Number(task.id),

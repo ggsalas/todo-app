@@ -3,9 +3,9 @@ import { eq, sql } from "drizzle-orm";
 import postgres from "postgres";
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import * as schema from "./schema";
-import { auth } from "app/auth";
-import { Task, Task as TaskType } from "@/lib/definitions";
-import { cache } from "react";
+import { AuthUser, Task, Task as TaskType } from "@/lib/definitions";
+import { revalidateTag } from "next/cache";
+import { TAGS, getSessionUser } from "@/lib/cacheWithUser";
 
 export let client = postgres(`${process.env.POSTGRES_URL}`);
 export let db = drizzle(client, { schema });
@@ -34,31 +34,21 @@ export async function createUser(
 }
 
 // Handle data
-async function _getUserTasks() {
-  let session = await auth();
-  const userEmail = session?.user?.email;
-  if (!userEmail) throw new Error("missing user email for get tasks");
-
+export async function getUserTasks(user: AuthUser) {
   const tasks: TaskType[] = await db.execute(
-    sql`select * from "Task" where "authorEmail" = ${userEmail} order by "dueDate"`
+    sql`select * from "Task" where "authorEmail" = ${user.email} order by "dueDate"`
   );
 
   return tasks;
 }
-export const getUserTasks = cache(_getUserTasks);
 
-async function _getUserTask(taskId: number) {
-  let session = await auth();
-  const userEmail = session?.user?.email;
-  if (!userEmail) throw new Error("missing user email for get tasks");
-
+export async function getUserTask(taskId: number, user: AuthUser) {
   const task: TaskType[] = await db.execute(
-    sql`select * from "Task" where "authorEmail" = ${userEmail} AND id = ${taskId}`
+    sql`select * from "Task" where "authorEmail" = ${user.email} AND id = ${taskId}`
   );
 
   return task[0];
 }
-export const getUserTask = cache(_getUserTask);
 
 export async function createUserTask({
   description,
@@ -66,21 +56,16 @@ export async function createUserTask({
   alertFrom,
   notes,
 }: Partial<Task>) {
-  let session = await auth();
-  const userEmail = session?.user?.email;
-  if (!userEmail) throw new Error("missing user email from session");
-  if (!description || !dueDate || !alertFrom)
-    throw new Error("missing required form fields");
-
+  const user = await getSessionUser();
   const newTask: TaskType[] = await db.execute(
     sql`
       insert into "Task"("authorEmail", description, "dueDate", "alertFrom", notes)
-        values(${userEmail}, ${description}, ${dueDate}, ${alertFrom}, ${
-      notes ?? ""
-    }); 
+        values(${user.email}, ${description}, ${dueDate}, ${alertFrom}, ${notes ?? ""
+      }); 
     `
   );
 
+  revalidateTag(TAGS.userTasks);
   return newTask;
 }
 
@@ -91,12 +76,7 @@ export async function editUserTask({
   dueDate,
   alertFrom,
 }: Partial<Task>) {
-  let session = await auth();
-  const userEmail = session?.user?.email;
-  if (!userEmail) throw new Error("missing user email from session");
-  if (!description || !dueDate || !alertFrom || !id)
-    throw new Error("missing required form fields");
-
+  const user = await getSessionUser();
   const sqlString = sql`
       update "Task"
         set 
@@ -105,20 +85,16 @@ export async function editUserTask({
           "dueDate" = ${dueDate},
           "alertFrom" = ${alertFrom},
           "updatedAt" = ${new Date()}
-      where "authorEmail" = ${userEmail} and id = ${id}
+      where "authorEmail" = ${user.email} and id = ${id}
     `;
   const newTask: TaskType[] = await db.execute(sqlString);
 
+  revalidateTag(TAGS.userTasks);
   return newTask;
 }
 
-export async function editUserTaskStatus({
-  id,
-  status
-}: Partial<Task>) {
-  let session = await auth();
-  const userEmail = session?.user?.email;
-  if (!userEmail) throw new Error("missing user email from session");
+export async function editUserTaskStatus({ id, status }: Partial<Task>) {
+  const user = await getSessionUser();
   if (!status || !id) throw new Error("missing required form fields");
 
   const sqlString = sql`
@@ -126,9 +102,10 @@ export async function editUserTaskStatus({
         set 
           status = ${status},
           "updatedAt" = ${new Date()}
-      where "authorEmail" = ${userEmail} and id = ${id}
+      where "authorEmail" = ${user.email} and id = ${id}
     `;
   const newTask: TaskType[] = await db.execute(sqlString);
 
+  revalidateTag(TAGS.userTasks);
   return newTask;
 }
