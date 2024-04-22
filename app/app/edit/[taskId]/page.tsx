@@ -1,4 +1,4 @@
-import { editUserTask, getUserTask } from "@/app/db";
+import { deleteUserTask, editUserTask, getUserTask } from "@/app/db";
 import { redirect } from "next/navigation";
 import { TaskForm } from "@/components/TaskForm/TaskForm";
 import { TAGS, cacheWithUser } from "@/lib/cacheWithUser";
@@ -31,7 +31,16 @@ export default async function EditTask({ params }: AddTaskProps) {
     redirect("/app");
   }
 
+  async function onDeleteUserTask() {
+    "use server";
+
+    console.log('before delete the task')
+    await deleteUserTask({ id: Number(task.id) })
+
+    redirect("/app");
+  }
+
   if (!task) throw new Error("No task found to edit");
 
-  return <TaskForm onSubmit={onEditUserTask} task={task} />;
+  return <TaskForm onSubmit={onEditUserTask} task={task} onDeleteTask={onDeleteUserTask} />;
 }

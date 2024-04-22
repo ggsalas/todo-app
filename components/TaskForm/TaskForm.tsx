@@ -7,13 +7,15 @@ import { SubmitButton } from "@/components/SubmitButton";
 import { InputCalendar } from "@/components/ui/InputCalendar/InputCalendar";
 import { subDays } from "date-fns/subDays";
 import { AlertFromButtons } from "./AlertFromButtons";
+import { DeleteTaskButton } from "./DeleteTaskButton";
 
 type TaskFormProps = {
   task?: TaskType;
   onSubmit: (formData: FormData) => void;
+  onDeleteTask?: (formData: FormData) => void;
 };
 
-export function TaskForm({ task, onSubmit }: TaskFormProps) {
+export function TaskForm({ task, onSubmit, onDeleteTask }: TaskFormProps) {
   const disabledDays = [
     { from: new Date("2000-01-01"), to: subDays(new Date(), 1) },
   ];
@@ -55,7 +57,9 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
               defaultValue={task?.notes ?? undefined}
             />
 
-            <div className="flex justify-end sticky bottom-4">
+            <div className="flex justify-between sticky bottom-4">
+              <DeleteTaskButton task={task} onDeleteTask={onDeleteTask} />
+
               <SubmitButton>
                 {task ? "Update Task" : "Create Task"}
               </SubmitButton>

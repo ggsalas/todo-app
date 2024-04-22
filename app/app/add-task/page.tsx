@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { TaskForm } from "@/components/TaskForm/TaskForm";
 
 export default async function AddTask() {
-  async function createTicket(formData: FormData) {
+  async function createTask(formData: FormData) {
     "use server";
     const { description, dueDate, alertFrom, notes } = Object.fromEntries(formData);
 
@@ -17,5 +17,5 @@ export default async function AddTask() {
     redirect("/app");
   }
 
-  return <TaskForm onSubmit={createTicket} />;
+  return <TaskForm onSubmit={createTask} />;
 }

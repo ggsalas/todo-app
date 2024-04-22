@@ -14,9 +14,6 @@ export function SubmitButton({ children, ...rest }: ButtonProps) {
       {...rest}
     >
       {children}
-      <span aria-live="polite" className="sr-only" role="status">
-        {pending ? 'Loading' : 'Submit form'}
-      </span>
     </Button>
   );
 }

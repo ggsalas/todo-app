@@ -16,7 +16,7 @@ export default async function AppPage() {
       <Link
         className={`${buttonVariants({
           size: "sm",
-        })} fixed bottom-8 right-4 w-16 !h-16 !rounded-[8rem] shadow-xl z-20`}
+        })} fixed bottom-8 right-4 w-14 !h-14 !rounded-[8rem] shadow-xl z-20`}
         href="/app/add-task"
       >
         <PlusIcon className="w-6 h-6" />

@@ -10,7 +10,9 @@ import { TAGS, getSessionUser } from "@/lib/cacheWithUser";
 export let client = postgres(`${process.env.POSTGRES_URL}`);
 export let db = drizzle(client, { schema });
 
-// Registration
+/********************************************************************************
+ * Registration
+ ********************************************************************************/
 export async function getUser(email: string) {
   const user = await db
     .select()
@@ -33,7 +35,9 @@ export async function createUser(
     .values({ email, password: hash, timezoneOffset });
 }
 
-// Handle data
+/********************************************************************************
+ * Handle data
+ ********************************************************************************/
 export async function getUserTasks(user: AuthUser) {
   const tasks: TaskType[] = await db.execute(
     sql`select * from "Task" where "authorEmail" = ${user.email} order by "dueDate"`
@@ -57,13 +61,16 @@ export async function createUserTask({
   notes,
 }: Partial<Task>) {
   const user = await getSessionUser();
-  const newTask: TaskType[] = await db.execute(
-    sql`
-      insert into "Task"("authorEmail", description, "dueDate", "alertFrom", notes)
-        values(${user.email}, ${description}, ${dueDate}, ${alertFrom}, ${notes ?? ""
-      }); 
-    `
-  );
+  if (!description || !dueDate || !alertFrom) {
+    throw new Error("missing required form fields");
+  }
+
+  const sqlString = sql`
+    insert into "Task"("authorEmail", description, "dueDate", "alertFrom", notes)
+      values(${user.email}, ${description}, ${dueDate}, ${alertFrom}, ${notes ?? ""
+    }); 
+  `;
+  const newTask: TaskType[] = await db.execute(sqlString);
 
   revalidateTag(TAGS.userTasks);
   return newTask;
@@ -77,16 +84,20 @@ export async function editUserTask({
   alertFrom,
 }: Partial<Task>) {
   const user = await getSessionUser();
+  if (!id || !description || !dueDate || !alertFrom) {
+    throw new Error("missing required form fields");
+  }
+
   const sqlString = sql`
-      update "Task"
-        set 
-          description = ${description},
-          notes = ${notes},
-          "dueDate" = ${dueDate},
-          "alertFrom" = ${alertFrom},
-          "updatedAt" = ${new Date()}
-      where "authorEmail" = ${user.email} and id = ${id}
-    `;
+    update "Task"
+      set 
+        description = ${description},
+        notes = ${notes},
+        "dueDate" = ${dueDate},
+        "alertFrom" = ${alertFrom},
+        "updatedAt" = ${new Date()}
+    where "authorEmail" = ${user.email} and id = ${id}
+  `;
   const newTask: TaskType[] = await db.execute(sqlString);
 
   revalidateTag(TAGS.userTasks);
@@ -95,17 +106,35 @@ export async function editUserTask({
 
 export async function editUserTaskStatus({ id, status }: Partial<Task>) {
   const user = await getSessionUser();
-  if (!status || !id) throw new Error("missing required form fields");
+  if (!status || !id) {
+    throw new Error("missing required form fields");
+  }
 
   const sqlString = sql`
-      update "Task"
-        set 
-          status = ${status},
-          "updatedAt" = ${new Date()}
-      where "authorEmail" = ${user.email} and id = ${id}
-    `;
+    update "Task"
+      set 
+        status = ${status},
+        "updatedAt" = ${new Date()}
+    where "authorEmail" = ${user.email} and id = ${id}
+  `;
   const newTask: TaskType[] = await db.execute(sqlString);
 
   revalidateTag(TAGS.userTasks);
   return newTask;
+}
+
+export async function deleteUserTask({ id }: Partial<Task>) {
+  const user = await getSessionUser();
+  if (!id) {
+    throw new Error("missing required form fields");
+  }
+
+  const sqlString = sql`
+    delete from "Task"
+    where id = ${id} and "authorEmail" = ${user.email}
+  `;
+  const deletedTask: TaskType[] = await db.execute(sqlString);
+
+  revalidateTag(TAGS.userTasks);
+  return deletedTask;
 }

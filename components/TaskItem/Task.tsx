@@ -7,7 +7,7 @@ import { useMemo } from "react";
 import { differenceInDays, formatDistanceToNowStrict } from "date-fns";
 import Markdown from "react-markdown";
 import "./styles.css";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { EditTaskActions } from "./EditTaskActions";
 
 type TaskProps = {
@@ -15,7 +15,6 @@ type TaskProps = {
 };
 
 export function Task({ task }: TaskProps) {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const displayActionsTaskId = Number(searchParams.get("displayActionsTaskId"));
   const isToday = useMemo(
@@ -76,7 +75,7 @@ export function Task({ task }: TaskProps) {
         {/* Actions */}
         {displayActionsTaskId === task.id && (
           <Card
-            className="absolute top-0 left-0 right-0 min-h-full z-10 text-white border-black backdrop-blur-sm bg-black/70 flex flex-col"
+            className="absolute top-0 left-0 right-0 min-h-full z-10 text-white border-black border-none backdrop-blur-sm bg-white/60 flex flex-col"
             onClick={(e) => {
               e.stopPropagation();
               onToggleActionsTaskId();

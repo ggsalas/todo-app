@@ -45,7 +45,7 @@ export function EditTaskActions({ taskId }: EditTaskActions) {
       <Button
         type="button"
         variant="outline"
-        className="rounded-r-none text-black"
+        className="rounded-r-none border-r-0 text-black"
         onClick={onSetDone}
       >
         Done!
