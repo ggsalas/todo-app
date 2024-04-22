@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { onChangeTaskStatus } from "./onChangeTaskStatus";
 import { Task } from "@/lib/definitions";
+import { MouseEvent } from "react";
 
 type EditTaskActions = {
   taskId: number;
@@ -18,7 +19,7 @@ type EditTaskActions = {
 export function EditTaskActions({ taskId }: EditTaskActions) {
   const router = useRouter();
 
-  const onSelectChange = (value: Task["status"] & 'edit') => {
+  const onSelectChange = (value: Task["status"] & "edit") => {
     if (value === "edit") {
       return router.push(`/app/edit/${taskId}`);
     } else {
@@ -30,7 +31,8 @@ export function EditTaskActions({ taskId }: EditTaskActions) {
     }
   };
 
-  const onSetDone = () => {
+  const onSetDone = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     const formData = new FormData();
     formData.append("status", "done");
     formData.append("id", String(taskId));
@@ -41,6 +43,7 @@ export function EditTaskActions({ taskId }: EditTaskActions) {
   return (
     <div className="flex text-black">
       <Button
+        type="button"
         variant="outline"
         className="rounded-r-none text-black"
         onClick={onSetDone}

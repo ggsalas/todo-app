@@ -40,19 +40,38 @@ export function Task({ task }: TaskProps) {
   };
 
   const onDisplayActionsTaskId = () => {
-    router.push(`/app/?displayActionsTaskId=${task.id}`);
+    // Use window.history.replaceState to avoid a request to the server
+    // This is only to handle the UI state
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}?displayActionsTaskId=${task.id}`
+    );
   };
 
   const onToggleActionsTaskId = () => {
     if (!!displayActionsTaskId) {
-      router.push(`/app/`);
+      window.history.replaceState({}, "", `${window.location.pathname}`);
     } else {
-      router.push(`/app/?displayActionsTaskId=${task.id}`);
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}?displayActionsTaskId=${task.id}`
+      );
     }
   };
 
+  const statusLabels = {
+    todo: 'todo',
+    inProgress: 'In Progress',
+    done: 'Done'
+  }
+
   return (
-    <Card className="relative cursor-pointer select-none" onClick={onDisplayActionsTaskId}>
+    <Card
+      className="relative cursor-pointer select-none"
+      onClick={onDisplayActionsTaskId}
+    >
       <CardContent className="px-2 py-2">
         {/* Actions */}
         {displayActionsTaskId === task.id && (
@@ -87,12 +106,12 @@ export function Task({ task }: TaskProps) {
                   status={
                     isToday && task.status === "todo"
                       ? "endsToday"
-                      : isOlderThanToday
-                      ? "olderThanToday"
-                      : task.status
+                      : isOlderThanToday && task.status !== 'done'
+                        ? "olderThanToday"
+                        : task.status
                   }
                 >
-                  {task.status.toUpperCase()}
+                  {statusLabels[task.status].toUpperCase()}
                 </TaskStatusBadge>
               </div>
             )}

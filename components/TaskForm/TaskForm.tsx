@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronLeftIcon } from "@/components/ui/icons/ChevronLeftIcon";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/SubmitButton";
 import { InputCalendar } from "@/components/ui/InputCalendar/InputCalendar";
 import { subDays } from "date-fns/subDays";
 import { AlertFromButtons } from "./AlertFromButtons";
@@ -56,9 +56,9 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
             />
 
             <div className="flex justify-end sticky bottom-4">
-              <Button type="submit">
+              <SubmitButton>
                 {task ? "Update Task" : "Create Task"}
-              </Button>
+              </SubmitButton>
             </div>
           </form>
         </div>

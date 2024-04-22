@@ -12,5 +12,5 @@ export async function onChangeTaskStatus(formData: FormData) {
     id: Number(id),
   });
 
-  redirect("/");
+  redirect("/app");
 }
