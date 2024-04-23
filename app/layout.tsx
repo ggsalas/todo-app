@@ -2,6 +2,7 @@ import "./globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import Favicon from "/public/favicon.ico";
+import { Analytics } from "@vercel/analytics/react"
 
 let title = "Dooet";
 let description = "Don't forget anything";
@@ -24,6 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="text-[19px] md:text-[16px]">
+      <Analytics />
       <body className={GeistSans.variable}>{children}</body>
     </html>
   );
