@@ -40,7 +40,6 @@ export async function getUserTasks(user: AuthUser, period: GET_TASKS_PERIODD) {
   const { start, end, endNextWeek } = getDateRange(period);
   let sqlString: ReturnType<typeof sql>;
 
-  console.log(' executing request')
   if (period === GET_TASKS_PERIODD.day) {
     sqlString = sql`
       select * 

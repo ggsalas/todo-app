@@ -15,8 +15,6 @@ export default async function HomePageLayout({ params, children }: HomePageLayou
     { period: "year", label: "Year" },
   ];
 
-  const period = params.period;
-  console.log(params, period)
   return (
     <div className="flex flex-col w-full h-full min-h-svh relative">
       {/* Floating button */}

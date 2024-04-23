@@ -38,14 +38,6 @@ export async function createUser(
 /********************************************************************************
  * Handle data
  ********************************************************************************/
-export async function getUserTasks(user: AuthUser) {
-  const tasks: TaskType[] = await db.execute(
-    sql`select * from "Task" where "authorEmail" = ${user.email} order by "dueDate"`
-  );
-
-  return tasks;
-}
-
 export async function getUserTask(taskId: number, user: AuthUser) {
   const task: TaskType[] = await db.execute(
     sql`select * from "Task" where "authorEmail" = ${user.email} AND id = ${taskId}`
