@@ -1,22 +1,29 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Task } from "@/components/TaskItem/Task";
 import { UserAvatar } from "@/components/UserAvatar";
-import { getUserTasks } from "../db";
 import Link from "next/link";
-import { TAGS, cacheWithUser } from "@/lib/cacheWithUser";
-import { Task as TaskType } from "@/lib/definitions";
 
-export default async function AppPage() {
-  const tasks: TaskType[] = await cacheWithUser(getUserTasks, [TAGS.userTasks]);
+type HomePageLayoutProps = {
+  params: { period: string };
+  children: React.ReactNode;
+}
 
+export default async function HomePageLayout({ params, children }: HomePageLayoutProps) {
+  const navigation = [
+    { period: "day", label: "Day" },
+    { period: "week", label: "Week" },
+    { period: "year", label: "Year" },
+  ];
+
+  const period = params.period;
+  console.log(params, period)
   return (
-    <div className="flex flex-col w-full h-full relative">
+    <div className="flex flex-col w-full h-full min-h-svh relative">
       {/* Floating button */}
       <Link
         className={`${buttonVariants({
           size: "sm",
-        })} fixed bottom-8 right-4 w-14 !h-14 !rounded-[8rem] shadow-xl z-20`}
+        })} fixed bottom-16 right-4 w-14 !h-14 !rounded-[8rem] shadow-xl z-20`}
         href="/app/add-task"
       >
         <PlusIcon className="w-6 h-6" />
@@ -40,11 +47,23 @@ export default async function AppPage() {
 
       {/* Content */}
       <div className="flex-1 overflow-auto select-none">
-        <div className="grid gap-2 p-3 mb-28">
-          {tasks.map((task) => (
-            <Task key={task.id} task={task} />
-          ))}
-        </div>
+        <div className="grid gap-2 p-3 mb-28">{children}</div>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex justify-stretch w-full border-t">
+        {navigation.map(({ period, label }) => (
+          <Link
+            key={period}
+            className={`
+              ${buttonVariants({ variant: "ghost" })}
+              ${params.period == period ? "font-black" : ""} 
+              flex-grow !rounded-none`}
+            href={`/app/${period}`}
+          >
+            {label}
+          </Link>
+        ))}
       </div>
     </div>
   );
