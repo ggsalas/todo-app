@@ -2,10 +2,17 @@ import { createUserTask } from "@/app/db";
 import { redirect } from "next/navigation";
 import { TaskForm } from "@/components/TaskForm/TaskForm";
 
-export default async function AddTask() {
+type AddTaskProps = {
+  searchParams: {
+    redirectRoute: string;
+  };
+}
+
+export default async function AddTask({ searchParams }: AddTaskProps) {
   async function createTask(formData: FormData) {
     "use server";
-    const { description, dueDate, alertFrom, notes } = Object.fromEntries(formData);
+    const { description, dueDate, alertFrom, notes, redirectRoute } =
+      Object.fromEntries(formData);
 
     await createUserTask({
       description: String(description),
@@ -14,8 +21,13 @@ export default async function AddTask() {
       alertFrom: String(alertFrom) as any,
     });
 
-    redirect("/app");
+    redirect(String(redirectRoute) || "/app");
   }
 
-  return <TaskForm onSubmit={createTask} />;
+  return (
+    <TaskForm
+      onSubmit={createTask}
+      redirectRoute={searchParams.redirectRoute}
+    />
+  );
 }

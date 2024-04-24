@@ -7,10 +7,10 @@ import {
   SelectItemNoCheck,
   SelectTrigger,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { onChangeTaskStatus } from "./onChangeTaskStatus";
 import { Task } from "@/lib/definitions";
-import { MouseEvent } from "react";
+import { MouseEvent, useEffect } from "react";
 
 type EditTaskActions = {
   taskId: number;
@@ -18,10 +18,15 @@ type EditTaskActions = {
 
 export function EditTaskActions({ taskId }: EditTaskActions) {
   const router = useRouter();
+  const params = useParams();
+
+  useEffect(() => {
+    return router.prefetch(`/app/edit/${taskId}/?redirectRoute=/app/${params.period}`);
+  }, [taskId, router, params])
 
   const onSelectChange = (value: Task["status"] & "edit") => {
     if (value === "edit") {
-      return router.push(`/app/edit/${taskId}`);
+      return router.push(`/app/edit/${taskId}/?redirectRoute=/app/${params.period}`);
     } else {
       const formData = new FormData();
       formData.append("status", value);

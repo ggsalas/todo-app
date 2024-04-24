@@ -16,11 +16,13 @@ import { Task as TaskType } from "@/lib/definitions";
 type DeleteTaskButtonProps = {
   task?: TaskType;
   onDeleteTask?: (formData: FormData) => void;
+  redirectRoute: string;
 };
 
 export function DeleteTaskButton({
   task,
   onDeleteTask,
+  redirectRoute,
 }: DeleteTaskButtonProps) {
   if (!task) return <div />;
 
@@ -43,6 +45,7 @@ export function DeleteTaskButton({
           action={onDeleteTask}
           className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2"
         >
+          <input hidden name="redirectRoute" defaultValue={redirectRoute} />
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <SubmitButton>Delete</SubmitButton>
         </form>

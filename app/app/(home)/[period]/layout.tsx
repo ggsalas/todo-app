@@ -6,9 +6,12 @@ import Link from "next/link";
 type HomePageLayoutProps = {
   params: { period: string };
   children: React.ReactNode;
-}
+};
 
-export default async function HomePageLayout({ params, children }: HomePageLayoutProps) {
+export default async function HomePageLayout({
+  params,
+  children,
+}: HomePageLayoutProps) {
   const navigation = [
     { period: "day", label: "Day" },
     { period: "week", label: "Week" },
@@ -22,25 +25,16 @@ export default async function HomePageLayout({ params, children }: HomePageLayou
         className={`${buttonVariants({
           size: "sm",
         })} fixed bottom-16 right-4 w-14 !h-14 !rounded-[8rem] shadow-xl z-20`}
-        href="/app/add-task"
+        href={`/app/add-task/?redirectRoute=/app/${params.period}`}
+        prefetch
       >
         <PlusIcon className="w-6 h-6" />
       </Link>
 
       {/* Header */}
-      <header className="h-16 flex items-center px-3 border-b">
-        <div className="w-full h-12 rounded-[3rem] bg-gray-100 dark:bg-gray-800 flex items-center relative">
-          <SearchIcon className="z-10 w-6 h-6 opacity-50 absolute left-4" />
-          <Input
-            autoCapitalize="off"
-            autoCorrect="off"
-            className="h-12 w-full rounded-[3rem] bg-transparent border-none pl-12 pr-14"
-            placeholder="Search"
-            spellCheck="false"
-            type="search"
-          />
-          <UserAvatar />
-        </div>
+      <header className="h-14 flex items-center px-3 border-b">
+        <h1 className="text-2xl font-extrabold">Dooet!</h1>
+        <UserAvatar />
       </header>
 
       {/* Content */}
@@ -49,14 +43,17 @@ export default async function HomePageLayout({ params, children }: HomePageLayou
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-stretch w-full border-t">
+      <div className="flex justify-stretch w-full">
         {navigation.map(({ period, label }) => (
           <Link
             key={period}
             className={`
               ${buttonVariants({ variant: "ghost" })}
-              ${params.period == period ? "font-black" : ""} 
-              flex-grow !rounded-none`}
+              ${params.period == period
+                ? "font-black bg-black text-white hover:bg-black/80 hover:text-white border-black"
+                : ""
+              } 
+              flex-grow !rounded-none border-t`}
             href={`/app/${period}`}
           >
             {label}
