@@ -1,0 +1,20 @@
+{
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "en-US",
+  "name": "Dooet!",
+  "short_name": "dooet",
+  "description": "Progressive Web App that lists games submitted to the A-Frame category in the js13kGames 2017 competition.",
+  "start_url": "https://dooet.vercel.app",
+  "scope": "https://dooet.vercel.app"
+  "icons": [
+    {
+      "src": "pwa-icon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    }
+  ]
+}
